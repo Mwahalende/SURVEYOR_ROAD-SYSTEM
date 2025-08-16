@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Officer Report Review</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      padding: 30px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      border-radius: 2px;
+    }
+
+    img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin: 20px 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .info {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border-left: 5px solid #3498db;
+    }
+
+    .info p {
+      margin: 12px 0;
+      font-size: 15px;
+      color: #2c3e50;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+    }
+
+    .info p strong {
+      min-width: 150px;
+      color: #34495e;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 15px;
+      margin: 20px 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    button {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .approve {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      color: white;
+    }
+
+    .reject {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+    }
+
+    .cancel {
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      color: white;
+    }
+
+    .download {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .container {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      h2 {
+        font-size: 1.8em;
+      }
+
+      .info {
+        padding: 15px;
+      }
+
+      .info p {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .info p strong {
+        margin-bottom: 5px;
+      }
+
+      button {
+        width: 100%;
+        min-width: 100%;
+      }
+    }
+  </style>
+
+    <link rel="stylesheet" href="footer-styles.css">
+    <script src="footer.js" defer></script>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Officer Report Review</h2>
+    <div id="content">Loading...</div>
+  </div>
+
+  <script>
+    const role = localStorage.getItem('role');
+    if (role !== 'Officer') {
+      alert('Access denied');
+      window.location.href = 'serveryerlogin.html';
+    }
+
+    const photoId = localStorage.getItem('selectedPhotoId');
+    const contentDiv = document.getElementById('content');
+    let currentPhoto = null;
+
+    async function loadPhoto() {
+      const res = await fetch('/get-all-photos');
+      const data = await res.json();
+      const photo = data.photos.find(p => p._id === photoId);
+      if (!photo) {
+        contentDiv.innerHTML = '<p>Photo not found.</p>';
+        return;
+      }
+      currentPhoto = photo;
+
+      const loc = photo.location || {};
+      const mapURL = `https://maps.google.com/maps?q=${loc.latitude},${loc.longitude}&hl=es&z=16&output=embed`;
+
+      contentDiv.innerHTML = `
+        <img src="${photo.photoUrl}" alt="Damage Image" />
+        <div class="info">
+          <p><strong>Surveyor:</strong> ${photo.fullname} (${photo.email})</p>
+          <p><strong>Road:</strong> ${photo.roadName}</p>
+          <p><strong>Damage Class:</strong> ${photo.damageClass}</p>
+          <p><strong>Comment:</strong> ${photo.comment}</p>
+          <p><strong>Date:</strong> ${new Date(photo.dateCreated).toLocaleString()}</p>
+          <p><strong>Survey Start Date:</strong> ${photo.surveyStartDate ? new Date(photo.surveyStartDate).toLocaleDateString() : 'Not set'}</p>
+          <p><strong>Survey End Date:</strong> ${photo.surveyEndDate ? new Date(photo.surveyEndDate).toLocaleDateString() : 'Not set'}</p>
+          <p><strong>Location:</strong> ${loc.street || ''}, ${loc.city || ''}, ${loc.region || ''}, ${loc.country || ''}</p>
+          <p><strong>Coords:</strong> ${loc.latitude?.toFixed(5)}, ${loc.longitude?.toFixed(5)}</p>
+        </div>
+        <iframe src="${mapURL}" loading="lazy"></iframe>
+
+        <textarea id="officerComment" placeholder="Enter your comments here...">${photo.officerComment || ''}</textarea>
+
+        <div class="button-group">
+          <button class="approve" onclick="submitAction('approved')">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.046z"/>
+            </svg>
+            Approve
+          </button>
+          <button class="reject" onclick="submitAction('rejected')">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+            Reject
+          </button>
+          <button class="cancel" onclick="submitAction('cancelled')">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+            Cancel
+          </button>
+          <button class="download" onclick="downloadPDF()">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 0a.5.5 0 0 1 .5.5v7.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 8.293V.5A.5.5 0 0 1 8 0z"/>
+              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+            Download PDF
+          </button>
+        </div>
+      `;
+    }
+
+    async function submitAction(action) {
+      const officerComment = document.getElementById('officerComment').value;
+      const validatedByOfficerId = localStorage.getItem('userId');
+
+      const res = await fetch(`/officer-review/${photoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          approvalStatus: action,
+          officerComment,
+          validatedByOfficerId
+        })
+      });
+
+      const result = await res.json();
+      alert(result.message || 'Updated');
+      window.location.href = 'officer.html';
+    }
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.src = currentPhoto.photoUrl;
+
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width / 3;
+        canvas.height = image.height / 3;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const imgData = canvas.toDataURL('image/jpeg');
+
+        doc.addImage(imgData, 'JPEG', 10, 10, 80, 60);
+        doc.setFontSize(11);
+        doc.text(`Surveyor: ${currentPhoto.fullname} (${currentPhoto.email})`, 10, 75);
+        doc.text(`Road: ${currentPhoto.roadName}`, 10, 82);
+        doc.text(`Damage Class: ${currentPhoto.damageClass}`, 10, 89);
+        doc.text(`Comment: ${currentPhoto.comment}`, 10, 96);
+        doc.text(`Survey Start: ${currentPhoto.surveyStartDate ? new Date(currentPhoto.surveyStartDate).toLocaleDateString() : 'Not set'}`, 10, 103);
+        doc.text(`Survey End: ${currentPhoto.surveyEndDate ? new Date(currentPhoto.surveyEndDate).toLocaleDateString() : 'Not set'}`, 10, 110);
+        doc.text(`Officer Comment: ${document.getElementById('officerComment').value}`, 10, 117);
+        doc.save(`review_${Date.now()}.pdf`);
+      };
+    }
+
+    loadPhoto();
+  </script>
+</body>
+</html>

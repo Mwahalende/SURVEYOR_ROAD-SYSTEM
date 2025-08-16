@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TILEMWA COMPANY - Road Survey & Civil Engineering</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .floating-images {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin: 40px auto;
+            max-width: 1400px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 66.67%; /* 3:2 aspect ratio */
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: float 6s infinite;
+        }
+
+        .image-container:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 1200px) {
+            .floating-images {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .floating-images {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .floating-images {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            .image-container {
+                padding-bottom: 75%; /* 4:3 aspect ratio for mobile */
+            }
+        }
+
+        .image-container:nth-child(1) { animation-delay: 0s; }
+        .image-container:nth-child(2) { animation-delay: 0.5s; }
+        .image-container:nth-child(3) { animation-delay: 1s; }
+        .image-container:nth-child(4) { animation-delay: 1.5s; }
+        .image-container:nth-child(5) { animation-delay: 2s; }
+        .image-container:nth-child(6) { animation-delay: 2.5s; }
+        .image-container:nth-child(7) { animation-delay: 3s; }
+        .image-container:nth-child(8) { animation-delay: 3.5s; }
+        .image-container:nth-child(9) { animation-delay: 4s; }
+        .image-container:nth-child(10) { animation-delay: 4.5s; }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(15px) rotate(-2deg); }
+        }
+
+        .cta-buttons {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            margin: 10px;
+            font-size: 1.2em;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+            border-radius: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .services {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            margin: 40px auto;
+            max-width: 1200px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .services h2 {
+            color: #1a2a6c;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .service-item {
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .service-item h3 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .floating-images {
+                height: 300px;
+            }
+
+            .image-container {
+                width: 200px;
+                height: 150px;
+            }
+        }
+
+        .footer {
+            background: linear-gradient(135deg, rgba(26, 42, 108, 0.95), rgba(178, 31, 31, 0.95));
+            color: white;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .developer-info {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .developer-info h2 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .developer-info h3 {
+            color: #fdbb2d;
+            font-size: 1.3em;
+            margin: 15px 0;
+        }
+
+        .dev-details {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-links {
+            margin-top: 20px;
+        }
+
+        .contact-links a {
+            color: #fdbb2d;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            color: white;
+        }
+
+        .dev-bio {
+            margin-top: 20px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+
+    <link rel="stylesheet" href="footer-styles.css">
+    <script src="footer.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <h1>TILEMWA COMPANY</h1>
+        <p>Excellence in Road Infrastructure & Civil Engineering</p>
+    </div>
+
+    <div class="floating-images">
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Road Workers in Safety Gear">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Surveyor at Work">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Engineers on Site">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Construction Team Meeting">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1596079890744-c1a0462d0975?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Road Repair Team">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Highway Workers">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Safety Inspection">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Engineering Planning">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Construction Site Team">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1516937941344-00b4e0337589?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Site Managers Meeting">
+        </div>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1628863353691-0071c8c1874c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Construction Team Briefing">
+        </div>
+    </div>
+
+    <div class="cta-buttons">
+        <a href="/index.html" class="cta-button">Login</a>
+    </div>
+
+    <div class="services">
+        <h2>Our Services</h2>
+        <div class="service-grid">
+            <div class="service-item">
+                <h3>Road Survey</h3>
+                <p>Professional road condition assessment and documentation</p>
+            </div>
+            <div class="service-item">
+                <h3>Infrastructure Development</h3>
+                <p>Modern road construction and rehabilitation</p>
+            </div>
+            <div class="service-item">
+                <h3>Quality Assurance</h3>
+                <p>Rigorous testing and quality control measures</p>
+            </div>
+            <div class="service-item">
+                <h3>Project Management</h3>
+                <p>Expert oversight of civil engineering projects</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="developer-info">
+            <h2>👨‍💻 Developer Info</h2>
+            <h3>Leo Tito Mwahalende</h3>
+            <div class="dev-details">
+                <p><strong>Full-Stack Developer | Electronics & Communication Engineer</strong></p>
+                
+                <p>📍 Dar es Salaam, Tanzania</p>
+                
+                <p>🎓 BSc in Electronics Science and Communication<br>(UDSM, 2022–2025)</p>
+                
+                <div class="contact-links">
+                    <p>
+                        📧 <a href="mailto:leomwahalende@gmail.com">leomwahalende@gmail.com</a> |
+                        ☎️ <a href="tel:+255686962149">+255 686 962 149</a>
+                    </p>
+                    <p>
+                        🔗 <a href="https://www.linkedin.com/in/leo-mwahalende" target="_blank">LinkedIn</a> |
+                        <a href="https://github.com/leomwahalende" target="_blank">GitHub</a>
+                    </p>
+                </div>
+            </div>
+            
+            <p class="dev-bio">
+                Developer of this platform, passionate about tech solutions that empower local industries 
+                and improve access through innovation.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

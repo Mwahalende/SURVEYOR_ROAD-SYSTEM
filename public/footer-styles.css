@@ -1,0 +1,58 @@
+/* Developer Footer Styles */
+.developer-footer {
+    background: linear-gradient(135deg, rgba(26, 42, 108, 0.95), rgba(178, 31, 31, 0.95));
+    color: white;
+    padding: 40px 20px;
+    margin-top: 60px;
+    border-radius: 20px 20px 0 0;
+}
+
+.developer-info {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.developer-info h2 {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.developer-info h3 {
+    color: #fdbb2d;
+    font-size: 1.3em;
+    margin: 15px 0;
+}
+
+.dev-details {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.contact-links {
+    margin-top: 20px;
+}
+
+.contact-links a {
+    color: #fdbb2d;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.contact-links a:hover {
+    color: white;
+}
+
+.dev-bio {
+    margin-top: 20px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 600px;
+    margin: 20px auto;
+}
